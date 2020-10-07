@@ -48,6 +48,7 @@ public class MainActivity extends AppCompatActivity {
         executorService.execute(connector);
         isChecked = false;
         setupViews();
+
     }
 
     public void setupViews() {
@@ -168,9 +169,6 @@ public class MainActivity extends AppCompatActivity {
         public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
             switchCompat = (SwitchCompat) compoundButton;
             isChecked = b;
-            System.out.println("***************************************\n" +
-                    "switch changed\n" +
-                    "***********************************");
             switchCheck();
         }
     }
