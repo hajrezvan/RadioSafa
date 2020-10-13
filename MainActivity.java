@@ -7,6 +7,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.View;
+import android.widget.Chronometer;
 import android.widget.CompoundButton;
 import android.widget.ImageButton;
 
@@ -29,6 +30,7 @@ public class MainActivity extends AppCompatActivity {
     private SwitchCompat switchCompat;
     private ImageButton refreshButton;
     private MediaPlayer mediaPlayer;
+    private Chronometer chronometer;
     private Connector connector;
     private boolean isChecked;
     private int counter = 0;
@@ -57,7 +59,9 @@ public class MainActivity extends AppCompatActivity {
         setInfoButton((ImageButton) findViewById(R.id.info_btn_id), listener);
         setRefreshButton((ImageButton) findViewById(R.id.refresh_btn_id), listener);
         setSwitchCompat((SwitchCompat) findViewById(R.id.switch_play_pause2));
+        setChronometer((Chronometer) findViewById(R.id.chronometer_id));
         switchCompat.setOnCheckedChangeListener(listener);
+        chronometer.setVisibility(View.VISIBLE);
 
         mediaPlayer = connector.getMediaPlayer();
 
@@ -77,6 +81,10 @@ public class MainActivity extends AppCompatActivity {
         this.switchCompat = switchCompat;
     }
 
+    public void setChronometer(Chronometer chronometer) {
+        this.chronometer = chronometer;
+    }
+
     public void showPlayButton() {
         switchCompat.setChecked(true);
     }
@@ -88,8 +96,9 @@ public class MainActivity extends AppCompatActivity {
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     public void initialize() {
         counter += 2;
-        if (connector.isChecker()){
+        if (connector.isChecker()) {
             mediaPlayer.start();
+            chronometer.start();
             showPlayButton();
             System.out.println("*******************************************");
             System.out.println(Arrays.toString(mediaPlayer.getTrackInfo()));
@@ -108,11 +117,13 @@ public class MainActivity extends AppCompatActivity {
         counter++;
         showPlayButton();
         mediaPlayer.start();
+        chronometer.start();
     }
 
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     public void stop() {
         counter--;
+        chronometer.stop();
         showPauseButton();
         mediaPlayer.pause();
     }
