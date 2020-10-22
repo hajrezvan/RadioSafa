@@ -11,8 +11,11 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.CompoundButton;
 import android.widget.ImageButton;
+import android.widget.Spinner;
 
 import java.util.Arrays;
 import java.util.concurrent.ExecutorService;
@@ -24,6 +27,7 @@ public class MainActivityDark extends AppCompatActivity {
     private ImageButton refreshButton;
     private MediaPlayer mediaPlayer;
     private Connector connector;
+    private Spinner spinner;
     private boolean isChecked;
     private int counter = 0;
 
@@ -40,10 +44,13 @@ public class MainActivityDark extends AppCompatActivity {
 
     public void setupViews() {
         MainActivityDark.Listener listener = new MainActivityDark.Listener();
-
+        SpinnerListener spinnerListener = new SpinnerListener();
         setInfoButton((ImageButton) findViewById(R.id.info_btn_id), listener);
         setRefreshButton((ImageButton) findViewById(R.id.refresh_btn_id), listener);
         setSwitchCompat((SwitchCompat) findViewById(R.id.switch_play_pause2));
+        setSpinner((Spinner) findViewById(R.id.them_setting));
+        getSpinner().setOnItemSelectedListener(spinnerListener);
+
         switchCompat.setOnCheckedChangeListener(listener);
 
         mediaPlayer = connector.getMediaPlayer();
@@ -62,6 +69,18 @@ public class MainActivityDark extends AppCompatActivity {
 
     public void setSwitchCompat(SwitchCompat switchCompat) {
         this.switchCompat = switchCompat;
+    }
+
+    public Spinner getSpinner() {
+        return spinner;
+    }
+
+    public void setSpinner(Spinner spinner) {
+        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this, R.array.thems,
+                android.R.layout.simple_spinner_item);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinner.setAdapter(adapter);
+        this.spinner = spinner;
     }
 
     public void showPlayButton() {
@@ -95,7 +114,7 @@ public class MainActivityDark extends AppCompatActivity {
         counter++;
         showPlayButton();
         mediaPlayer.start();
-        }
+    }
 
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     public void stop() {
@@ -161,4 +180,27 @@ public class MainActivityDark extends AppCompatActivity {
         }
     }
 
+    private class SpinnerListener implements AdapterView.OnItemSelectedListener {
+
+        @Override
+        public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+            String themSelected = adapterView.getItemAtPosition(i).toString();
+            if ("روشن".equals(themSelected)) {
+                //TODO go to MainActivity for light
+                new Handler().postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        Intent intent = new Intent(MainActivityDark.this, MainActivity.class);
+                        startActivity(intent);
+                    }
+                }, 0);
+                finish();
+            }
+        }
+
+        @Override
+        public void onNothingSelected(AdapterView<?> adapterView) {
+
+        }
+    }
 }
