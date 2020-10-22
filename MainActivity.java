@@ -50,7 +50,6 @@ public class MainActivity extends AppCompatActivity {
         executorService.execute(connector);
         isChecked = false;
         setupViews();
-
     }
 
     public void setupViews() {
