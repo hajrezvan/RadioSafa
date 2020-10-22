@@ -38,7 +38,6 @@ public class MainActivityDark extends AppCompatActivity {
         setupViews();
     }
 
-
     public void setupViews() {
         MainActivityDark.Listener listener = new MainActivityDark.Listener();
 
