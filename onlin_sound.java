@@ -10,10 +10,13 @@ import android.view.View;
 import android.widget.Chronometer;
 import android.widget.CompoundButton;
 import android.widget.ImageButton;
+import android.widget.TextView;
 
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.SwitchCompat;
+import androidx.core.view.GravityCompat;
+import androidx.drawerlayout.widget.DrawerLayout;
 
 import java.util.Arrays;
 import java.util.concurrent.ExecutorService;
@@ -25,7 +28,7 @@ import java.util.concurrent.Executors;
  * @author Haj Rezvan
  * @version 2.5
  */
-public class MainActivity extends AppCompatActivity {
+public class onlin_sound extends AppCompatActivity {
 
     private SwitchCompat switchCompat;
     private ImageButton refreshButton;
@@ -34,7 +37,8 @@ public class MainActivity extends AppCompatActivity {
     private Connector connector;
     private boolean isChecked;
     private int counter = 0;
-
+    DrawerLayout drawerlayout;
+    TextView textView;
     /**
      * When program starts, view begin from this method.
      * This method initialises field and set them in activity.
@@ -45,13 +49,33 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main_2);
+        drawerlayout= findViewById(R.id.drowerlayout);
         connector = new Connector();
         ExecutorService executorService = Executors.newCachedThreadPool();
         executorService.execute(connector);
         isChecked = false;
         setupViews();
 
+
     }
+
+        public void clickmenu(View view) {
+            //issue tab menu picture and logout at program is this section
+            page_one.odrower(drawerlayout);
+        }
+        public void clickinfo(View view){
+            page_one.redirect(this,info.class);
+        }
+        public void click_online_music(View view){
+
+            page_one.redirect(this,onlin_sound.class);
+        }
+        public void clickhome(View view){
+
+            page_one.redirect(this,page_one.class);
+        }
+
+
 
     public void setupViews() {
         Listener listener = new Listener();
@@ -106,7 +130,7 @@ public class MainActivity extends AppCompatActivity {
         } else {
             System.err.println("We have a problem in play file");
             switchCompat.setVisibility(View.INVISIBLE);
-            AlertDialog.Builder alert = new AlertDialog.Builder(MainActivity.this);
+            AlertDialog.Builder alert = new AlertDialog.Builder(onlin_sound.this);
             alert.setMessage("کلاس هنوز شروع نشده، لطفا اندکی بعد تلاش کنید").show();
             refreshButton.setVisibility(View.VISIBLE);
         }
@@ -149,10 +173,12 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void showInfoPage() {
-        new Handler().postDelayed(new Runnable() {
+        new Handler().postDelayed(
+
+                new Runnable() {
             @Override
             public void run() {
-                Intent intent = new Intent(MainActivity.this, InfoActivity.class);
+                Intent intent = new Intent(onlin_sound.this, InfoActivity.class);
                 startActivity(intent);
             }
         }, 0);
@@ -183,5 +209,12 @@ public class MainActivity extends AppCompatActivity {
             switchCheck();
         }
     }
-
+    @Override
+    public void onBackPressed() {
+        if (drawerlayout.isDrawerOpen(GravityCompat.START)){
+            drawerlayout.closeDrawer(GravityCompat.START);
+        }
+        else
+            super.onBackPressed();
+    }
 }

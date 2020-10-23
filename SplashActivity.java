@@ -21,7 +21,7 @@ public class SplashActivity extends AppCompatActivity {
     private class MyHandler implements Runnable {
         @Override
         public void run() {
-            Intent intent = new Intent(SplashActivity.this, MainActivity.class);
+            Intent intent = new Intent(SplashActivity.this, page_one.class);
             startActivity(intent);
             finish();
         }
