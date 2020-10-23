@@ -9,7 +9,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 
-public class page_one extends AppCompatActivity {
+public class PageOne extends AppCompatActivity {
 
     DrawerLayout drawerlayout;
 
