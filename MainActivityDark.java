@@ -1,5 +1,9 @@
 package com.example.radiosafa;
 
+import androidx.annotation.RequiresApi;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.SwitchCompat;
+
 import android.app.AlertDialog;
 import android.content.Intent;
 import android.media.MediaPlayer;
@@ -7,73 +11,59 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.View;
-import android.widget.Chronometer;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.CompoundButton;
 import android.widget.ImageButton;
-
-import androidx.annotation.RequiresApi;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.SwitchCompat;
+import android.widget.Spinner;
 
 import java.util.Arrays;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-/**
- * MainActivity have a online music player and work with a URL from its server.
- *
- * @author Haj Rezvan
- * @version 2.5
- */
-public class MainActivity extends AppCompatActivity {
+public class MainActivityDark extends AppCompatActivity {
 
     private SwitchCompat switchCompat;
     private ImageButton refreshButton;
     private MediaPlayer mediaPlayer;
-    private Chronometer chronometer;
     private Connector connector;
+    private Spinner spinner;
     private boolean isChecked;
     private int counter = 0;
 
-    /**
-     * When program starts, view begin from this method.
-     * This method initialises field and set them in activity.
-     *
-     * @param savedInstanceState pass to onCreate method in its super class.
-     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main_2);
+        setContentView(R.layout.activity_main_dark2);
         connector = new Connector();
         ExecutorService executorService = Executors.newCachedThreadPool();
         executorService.execute(connector);
         isChecked = false;
         setupViews();
-
     }
 
     public void setupViews() {
-        Listener listener = new Listener();
-
+        MainActivityDark.Listener listener = new MainActivityDark.Listener();
+        SpinnerListener spinnerListener = new SpinnerListener();
         setInfoButton((ImageButton) findViewById(R.id.info_btn_id), listener);
         setRefreshButton((ImageButton) findViewById(R.id.refresh_btn_id), listener);
         setSwitchCompat((SwitchCompat) findViewById(R.id.switch_play_pause2));
-        setChronometer((Chronometer) findViewById(R.id.chronometer_id));
+        setSpinner((Spinner) findViewById(R.id.them_setting));
+        getSpinner().setOnItemSelectedListener(spinnerListener);
+
         switchCompat.setOnCheckedChangeListener(listener);
-        chronometer.setVisibility(View.VISIBLE);
 
         mediaPlayer = connector.getMediaPlayer();
 
         findViewById(R.id.refresh_btn_id).setVisibility(View.GONE);
     }
 
-    public void setRefreshButton(ImageButton refreshButton, Listener listener) {
+    public void setRefreshButton(ImageButton refreshButton, MainActivityDark.Listener listener) {
         this.refreshButton = refreshButton;
         this.refreshButton.setOnClickListener(listener);
     }
 
-    public void setInfoButton(ImageButton infoButton, Listener listener) {
+    public void setInfoButton(ImageButton infoButton, MainActivityDark.Listener listener) {
         infoButton.setOnClickListener(listener);
     }
 
@@ -81,8 +71,16 @@ public class MainActivity extends AppCompatActivity {
         this.switchCompat = switchCompat;
     }
 
-    public void setChronometer(Chronometer chronometer) {
-        this.chronometer = chronometer;
+    public Spinner getSpinner() {
+        return spinner;
+    }
+
+    public void setSpinner(Spinner spinner) {
+        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this, R.array.thems,
+                android.R.layout.simple_spinner_item);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinner.setAdapter(adapter);
+        this.spinner = spinner;
     }
 
     public void showPlayButton() {
@@ -98,7 +96,6 @@ public class MainActivity extends AppCompatActivity {
         counter += 2;
         if (connector.isChecker()) {
             mediaPlayer.start();
-            chronometer.start();
             showPlayButton();
             System.out.println("*******************************************");
             System.out.println(Arrays.toString(mediaPlayer.getTrackInfo()));
@@ -106,7 +103,7 @@ public class MainActivity extends AppCompatActivity {
         } else {
             System.err.println("We have a problem in play file");
             switchCompat.setVisibility(View.INVISIBLE);
-            AlertDialog.Builder alert = new AlertDialog.Builder(MainActivity.this);
+            AlertDialog.Builder alert = new AlertDialog.Builder(MainActivityDark.this);
             alert.setMessage("کلاس هنوز شروع نشده، لطفا اندکی بعد تلاش کنید").show();
             refreshButton.setVisibility(View.VISIBLE);
         }
@@ -117,13 +114,12 @@ public class MainActivity extends AppCompatActivity {
         counter++;
         showPlayButton();
         mediaPlayer.start();
-        chronometer.start();
     }
 
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     public void stop() {
         counter--;
-        chronometer.stop();
+
         showPauseButton();
         mediaPlayer.pause();
     }
@@ -152,7 +148,7 @@ public class MainActivity extends AppCompatActivity {
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
-                Intent intent = new Intent(MainActivity.this, InfoActivity.class);
+                Intent intent = new Intent(MainActivityDark.this, InfoActivity.class);
                 startActivity(intent);
             }
         }, 0);
@@ -184,4 +180,27 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    private class SpinnerListener implements AdapterView.OnItemSelectedListener {
+
+        @Override
+        public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+            String themSelected = adapterView.getItemAtPosition(i).toString();
+            if ("روشن".equals(themSelected)) {
+                //TODO go to MainActivity for light
+                new Handler().postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        Intent intent = new Intent(MainActivityDark.this, MainActivity.class);
+                        startActivity(intent);
+                    }
+                }, 0);
+                finish();
+            }
+        }
+
+        @Override
+        public void onNothingSelected(AdapterView<?> adapterView) {
+
+        }
+    }
 }
