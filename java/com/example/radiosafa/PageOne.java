@@ -19,45 +19,47 @@ public class PageOne extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_page_one);
+        setContentView(R.layout.activity_main_dark2);
 
-        drawerlayout= findViewById(R.id.drowerlayout);
-
-            }
-    public void clickmenu(View view){
-        odrower(drawerlayout);
+        drawerlayout = findViewById(R.id.drawer_layout_dark);
 
     }
 
-    public static void odrower(DrawerLayout drawerLayout) {
+    public void clickMenu(View view) {
+        oDrawer(drawerlayout);
+
+    }
+
+    public static void oDrawer(DrawerLayout drawerLayout) {
         drawerLayout.openDrawer(GravityCompat.START);
     }
 
 
-    public void clickHome(View view){
+    public void clickHome(View view) {
 
-        redirect(this,PageOne.class);
+        redirect(this, PageOne.class);
 
     }
-    public void clickInfo(View view){
-        redirect(this,Info.class);
+
+    public void clickInfo(View view) {
+        redirect(this, Info.class);
     }
-    public void click_online_music(View view){
+
+    public void click_online_music(View view) {
         redirect(this, MainActivity.class);
     }
 
-    public static void redirect(Activity activity , Class aclass) {
-        Intent intent =new Intent(activity,aclass);
+    public static void redirect(Activity activity, Class aClass) {
+        Intent intent = new Intent(activity, aClass);
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         activity.startActivity(intent);
     }
 
     @Override
     public void onBackPressed() {
-        if (drawerlayout.isDrawerOpen(GravityCompat.START)){
+        if (drawerlayout.isDrawerOpen(GravityCompat.START)) {
             drawerlayout.closeDrawer(GravityCompat.START);
-        }
-        else
+        } else
             super.onBackPressed();
     }
 

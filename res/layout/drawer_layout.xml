@@ -6,15 +6,14 @@
     <FrameLayout
         android:id="@+id/frame_layout_id"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        />
+        android:layout_height="match_parent" />
 
     <ListView
         android:id="@+id/slider_list"
         android:layout_width="140dp"
         android:layout_height="match_parent"
-        android:choiceMode="singleChoice"
         android:background="@color/starBackground"
+        android:choiceMode="singleChoice"
         android:divider="@color/itemSelected"
-        android:dividerHeight="0dp"/>
+        android:dividerHeight="0dp" />
 </androidx.drawerlayout.widget.DrawerLayout>
