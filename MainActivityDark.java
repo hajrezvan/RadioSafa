@@ -34,7 +34,7 @@ public class MainActivityDark extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main_dark2);
+        setContentView(R.layout.MainActivityDark);
         connector = new Connector();
         ExecutorService executorService = Executors.newCachedThreadPool();
         executorService.execute(connector);

@@ -23,18 +23,18 @@ public class info extends AppCompatActivity {
 
     public void clickmenu(View view) {
         //issue tab menu picture and logout at program is this section
-        page_one.odrower(drawerlayout);
+        PageOne.odrower(drawerlayout);
     }
     public void clickinfo(View view){
-        page_one.redirect(this,info.class);
+        PageOne.redirect(this,info.class);
     }
     public void click_online_music(View view){
 
-        page_one.redirect(this,onlin_sound.class);
+        PageOne.redirect(this,MainActivity.class);
     }
     public void clickhome(View view){
 
-        page_one.redirect(this,page_one.class);
+        PageOne.redirect(this,PageOne.class);
     }
 
 
