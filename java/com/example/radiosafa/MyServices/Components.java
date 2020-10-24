@@ -1,4 +1,4 @@
-package com.example.radiosafa.MainActivityComponents;
+package com.example.radiosafa.MyServices;
 
 import android.app.AlertDialog;
 import android.content.Intent;
@@ -13,14 +13,19 @@ import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.SwitchCompat;
 
-import com.example.radiosafa.InfoActivity;
-import com.example.radiosafa.MyServices.Connector;
+import com.example.radiosafa.Activites.Info.InfoActivity;
 import com.example.radiosafa.R;
 
-import java.util.Arrays;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
+/**
+ * Components class, setup views for MainActivity activity and MainActivityDark activity.
+ * This class setup components in view and handling them.
+ *
+ * @author Haj Rezvan
+ * @version 1.2.4
+ */
 public class Components {
     private AppCompatActivity activity;
     private SwitchCompat switchCompat;
@@ -30,15 +35,18 @@ public class Components {
     private boolean isChecked;
     private int counter = 0;
 
+    /**
+     * Initialize the fields and setting them.
+     * @param activity is a activity that should be setup components on its.
+     */
     public Components(AppCompatActivity activity) {
         this.activity = activity;
-        setup();
     }
 
-    public AppCompatActivity getActivity() {
-        return activity;
-    }
-
+    /**
+     * Initialize connector and create a executor service for checking server connecting.
+     * Than setting components.
+     */
     public void setup() {
         connector = new Connector();
         ExecutorService executorService = Executors.newCachedThreadPool();
@@ -47,6 +55,9 @@ public class Components {
         setupViews();
     }
 
+    /**
+     * setting components and their listeners.
+     */
     public void setupViews() {
         Listener listener = new Listener();
         setInfoButton((ImageButton) activity.findViewById(R.id.info_btn_id), listener);
@@ -59,36 +70,55 @@ public class Components {
         activity.findViewById(R.id.refresh_btn_id).setVisibility(View.GONE);
     }
 
+    /**
+     * @param refreshButton a button for refreshing server connecting.
+     * @param listener a listener that button set its to itself.
+     */
     public void setRefreshButton(ImageButton refreshButton, Listener listener) {
         this.refreshButton = refreshButton;
         this.refreshButton.setOnClickListener(listener);
     }
 
+    /**
+     * @param infoButton a button for showing info page.
+     * @param listener a listener that button set its to itself.
+     */
     public void setInfoButton(ImageButton infoButton, Listener listener) {
         infoButton.setOnClickListener(listener);
     }
 
+    /**
+     * @param switchCompat a button for playing and pausing the media.
+     */
     public void setSwitchCompat(SwitchCompat switchCompat) {
         this.switchCompat = switchCompat;
     }
 
+    /**
+     * set switch to play style.
+     */
     public void showPlayButton() {
         switchCompat.setChecked(true);
     }
 
+    /**
+     * set switch to pause style.
+     */
     public void showPauseButton() {
         switchCompat.setChecked(false);
     }
 
+    /**
+     * Initialize the server connecting.
+     * If server is connected, app play or not connect, show a alert and
+     *  show refresh button and hide switch.
+     */
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     public void initialize() {
         counter += 2;
         if (connector.isChecker()) {
             mediaPlayer.start();
             showPlayButton();
-            System.out.println("*******************************************");
-            System.out.println(Arrays.toString(mediaPlayer.getTrackInfo()));
-            System.out.println("*******************************************");
         } else {
             System.err.println("We have a problem in play file");
             switchCompat.setVisibility(View.INVISIBLE);
@@ -98,6 +128,10 @@ public class Components {
         }
     }
 
+
+    /**
+     * Media player play and switch is true
+     */
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     public void play() {
         counter++;
@@ -105,6 +139,9 @@ public class Components {
         mediaPlayer.start();
     }
 
+    /**
+     * Media player stop and switch is false
+     */
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     public void stop() {
         counter--;
@@ -112,6 +149,9 @@ public class Components {
         mediaPlayer.pause();
     }
 
+    /**
+     * Checking for initialize or play or stop.
+     */
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     public void checkPlay() {
         if (counter == 0) {
@@ -123,6 +163,9 @@ public class Components {
         }
     }
 
+    /**
+     * Switch checks that should play or stop now.
+     */
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     public void switchCheck() {
         if (switchCompat.isChecked()) {
@@ -132,6 +175,9 @@ public class Components {
         }
     }
 
+    /**
+     * Intent to info page
+     */
     public void showInfoPage() {
         new Handler().postDelayed(new Runnable() {
             @Override
