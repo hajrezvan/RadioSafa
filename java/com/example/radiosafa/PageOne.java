@@ -9,6 +9,8 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 
+//TODO We must getting resources from mr.Dehghan
+/*
 public class PageOne extends AppCompatActivity {
 
     DrawerLayout drawerlayout;
@@ -58,4 +60,4 @@ public class PageOne extends AppCompatActivity {
             super.onBackPressed();
     }
 
-}
+}*/

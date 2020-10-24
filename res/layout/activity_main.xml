@@ -5,7 +5,7 @@
     android:layout_height="match_parent"
     android:background="@color/Background"
     android:orientation="vertical"
-    tools:context=".MainActivity"
+    tools:context=".Activites.Main.MainActivity"
     tools:ignore="ExtraText">
 
 

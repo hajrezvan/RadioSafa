@@ -1,4 +1,4 @@
-package com.example.radiosafa;
+package com.example.radiosafa.Activites.Setting;
 
 import android.os.Bundle;
 
@@ -6,7 +6,9 @@ import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.preference.PreferenceFragmentCompat;
 
-public class SettingsActivityLight extends AppCompatActivity {
+import com.example.radiosafa.R;
+
+public class SettingsActivityDark extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
