@@ -28,7 +28,7 @@ public class Connector implements Runnable{
 
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     public void setURL() {
-        String url = "https://radio.masjedsafa.com/relay?type=http&nocache=4"; // your URL here
+        String url = "URL"; // your URL here
         mediaPlayer.setAudioAttributes(
                 new AudioAttributes.Builder()
                         .setContentType(AudioAttributes.CONTENT_TYPE_MUSIC)
