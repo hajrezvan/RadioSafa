@@ -9,8 +9,9 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 
+import com.example.radiosafa.Activites.Main.MainActivity;
+
 //TODO We must getting resources from mr.Dehghan
-/*
 public class PageOne extends AppCompatActivity {
 
     DrawerLayout drawerlayout;
@@ -33,16 +34,16 @@ public class PageOne extends AppCompatActivity {
     }
 
 
-    public void clickhome(View view){
+    public void clickHome(View view){
 
-        redirect(this,page_one.class);
+        redirect(this,PageOne.class);
 
     }
-    public void clickinfo(View view){
-        redirect(this,info.class);
+    public void clickInfo(View view){
+        redirect(this,Info.class);
     }
     public void click_online_music(View view){
-        redirect(this,onlin_sound.class);
+        redirect(this, MainActivity.class);
     }
 
     public static void redirect(Activity activity , Class aclass) {
@@ -60,4 +61,4 @@ public class PageOne extends AppCompatActivity {
             super.onBackPressed();
     }
 
-}*/
+}
