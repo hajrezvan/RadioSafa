@@ -15,19 +15,19 @@
         android:usesCleartextTraffic="true"
         tools:targetApi="m">
         <activity
-            android:name=".SettingsActivityDark"
-            android:label="@string/title_activity_settings_dark"></activity>
+            android:name=".Activites.Setting.SettingsActivityDark"
+            android:label="@string/title_activity_settings_dark" />
         <activity
-            android:name=".SettingsActivityLight"
+            android:name=".Activites.Setting.SettingsActivityLight"
             android:label="@string/title_activity_settings_light" />
-        <activity android:name=".MainActivityDark" />
+        <activity android:name=".Activites.Main.MainActivityDark" />
         <activity
             android:name=".NavigationDrawerActivity"
             android:label="@string/title_activity_navigation_drawer"
             android:theme="@style/AppTheme.NoActionBar" />
-        <activity android:name=".InfoActivity" />
-        <activity android:name=".MainActivity" />
-        <activity android:name=".SplashActivity">
+        <activity android:name=".Activites.Info.InfoActivity" />
+        <activity android:name=".Activites.Main.MainActivity" />
+        <activity android:name=".Activites.Splash.SplashActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

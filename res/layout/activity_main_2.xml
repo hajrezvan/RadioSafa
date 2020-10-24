@@ -33,7 +33,7 @@
         android:src="@drawable/button_place" />
 
     <androidx.appcompat.widget.SwitchCompat
-        android:id="@+id/switch_play_pause2"
+        android:id="@+id/switch_play_pause_light"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
@@ -44,7 +44,7 @@
         tools:ignore="UseSwitchCompatOrMaterialXml" />
 
     <ImageButton
-        android:id="@+id/refresh_btn_id"
+        android:id="@+id/refresh_btn_light_id"
         android:layout_width="100dp"
         android:layout_height="100dp"
         android:layout_alignParentBottom="true"

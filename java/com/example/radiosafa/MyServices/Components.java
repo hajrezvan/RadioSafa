@@ -33,14 +33,17 @@ public class Components {
     private MediaPlayer mediaPlayer;
     private Connector connector;
     private boolean isChecked;
+    //if true, activity is dark them
+    private boolean isDark;
     private int counter = 0;
 
     /**
      * Initialize the fields and setting them.
      * @param activity is a activity that should be setup components on its.
      */
-    public Components(AppCompatActivity activity) {
+    public Components(AppCompatActivity activity, boolean isDark) {
         this.activity = activity;
+        this.isDark = isDark;
     }
 
     /**
@@ -60,14 +63,19 @@ public class Components {
      */
     public void setupViews() {
         Listener listener = new Listener();
+        if (isDark) {
+            setSwitchCompat((SwitchCompat) activity.findViewById(R.id.switch_play_pause_dark));
+            setRefreshButton((ImageButton) activity.findViewById(R.id.refresh_btn_dark_id), listener);
+        } else {
+            setSwitchCompat((SwitchCompat) activity.findViewById(R.id.switch_play_pause_light));
+            setRefreshButton((ImageButton) activity.findViewById(R.id.refresh_btn_light_id), listener);
+        }
         setInfoButton((ImageButton) activity.findViewById(R.id.info_btn_id), listener);
-        setRefreshButton((ImageButton) activity.findViewById(R.id.refresh_btn_id), listener);
-        setSwitchCompat((SwitchCompat) activity.findViewById(R.id.switch_play_pause2));
         switchCompat.setOnCheckedChangeListener(listener);
 
         mediaPlayer = connector.getMediaPlayer();
 
-        activity.findViewById(R.id.refresh_btn_id).setVisibility(View.GONE);
+        activity.findViewById(R.id.refresh_btn_dark_id).setVisibility(View.GONE);
     }
 
     /**

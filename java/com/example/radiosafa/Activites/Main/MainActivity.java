@@ -26,7 +26,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main_2);
-        Components components = new Components(this);
+        Components components = new Components(this,false);
         components.setup();
     }
 }

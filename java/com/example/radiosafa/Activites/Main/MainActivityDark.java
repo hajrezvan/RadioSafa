@@ -19,7 +19,7 @@ public class MainActivityDark extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main_dark2);
-        Components components = new Components(this);
+        Components components = new Components(this,true);
         components.setup();
     }
 }
