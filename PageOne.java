@@ -33,14 +33,14 @@ public class PageOne extends AppCompatActivity {
 
     public void clickhome(View view){
 
-        redirect(this,page_one.class);
+        redirect(this,PageOne.class);
 
     }
     public void clickinfo(View view){
         redirect(this,info.class);
     }
     public void click_online_music(View view){
-        redirect(this,onlin_sound.class);
+        redirect(this,MainActivity.class);
     }
 
     public static void redirect(Activity activity , Class aclass) {
