@@ -9,7 +9,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 
-import com.example.radiosafa.Activites.Main.MainActivity;
+import com.example.radiosafa.Activites.Main.OnlinePlayerLight;
 
 //TODO We must getting resources from mr.Dehghan
 public class Info extends AppCompatActivity {
@@ -33,7 +33,7 @@ public class Info extends AppCompatActivity {
 
     public void clickOnlinePlayer(View view) {
 
-        PageOne.redirect(this, MainActivity.class);
+        PageOne.redirect(this, OnlinePlayerLight.class);
     }
 
     public void clickHome(View view) {

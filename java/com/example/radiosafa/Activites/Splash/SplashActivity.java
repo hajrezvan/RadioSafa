@@ -6,7 +6,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 
-import com.example.radiosafa.Activites.Main.MainActivity;
+import com.example.radiosafa.Activites.Main.OnlinePlayerLight;
 import com.example.radiosafa.R;
 
 public class SplashActivity extends AppCompatActivity {
@@ -18,13 +18,13 @@ public class SplashActivity extends AppCompatActivity {
 
         //Create a object from inner class.
         MyHandler handler = new MyHandler();
-        new Handler().postDelayed(handler,4000);
+        new Handler().postDelayed(handler, 4000);
     }
 
     private class MyHandler implements Runnable {
         @Override
         public void run() {
-            Intent intent = new Intent(SplashActivity.this, MainActivity.class);
+            Intent intent = new Intent(SplashActivity.this, OnlinePlayerLight.class);
             startActivity(intent);
             finish();
         }

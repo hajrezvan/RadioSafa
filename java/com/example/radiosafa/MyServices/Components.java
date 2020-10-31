@@ -1,5 +1,6 @@
 package com.example.radiosafa.MyServices;
 
+import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.content.Intent;
 import android.media.MediaPlayer;
@@ -8,6 +9,7 @@ import android.os.Handler;
 import android.view.View;
 import android.widget.CompoundButton;
 import android.widget.ImageButton;
+import android.widget.TextView;
 
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
@@ -32,13 +34,18 @@ public class Components {
     private ImageButton refreshButton;
     private MediaPlayer mediaPlayer;
     private Connector connector;
+    private OnlineUserChecker userChecker;
+    private TextView textView;
     private boolean isChecked;
     //if true, activity is dark them
     private boolean isDark;
+    //    private boolean isPlay;
     private int counter = 0;
+    private int number;
 
     /**
      * Initialize the fields and setting them.
+     *
      * @param activity is a activity that should be setup components on its.
      */
     public Components(AppCompatActivity activity, boolean isDark) {
@@ -52,8 +59,10 @@ public class Components {
      */
     public void setup() {
         connector = new Connector();
+        userChecker = new OnlineUserChecker();
         ExecutorService executorService = Executors.newCachedThreadPool();
         executorService.execute(connector);
+        executorService.execute(userChecker);
         isChecked = false;
         setupViews();
     }
@@ -69,18 +78,26 @@ public class Components {
         } else {
             setSwitchCompat((SwitchCompat) activity.findViewById(R.id.switch_play_pause_light));
             setRefreshButton((ImageButton) activity.findViewById(R.id.refresh_btn_light_id), listener);
+            setTextView((TextView) activity.findViewById(R.id.online_user_light_id));
         }
         setInfoButton((ImageButton) activity.findViewById(R.id.info_btn_id), listener);
+
         switchCompat.setOnCheckedChangeListener(listener);
 
         mediaPlayer = connector.getMediaPlayer();
+        textView.setVisibility(View.GONE);
 
-        activity.findViewById(R.id.refresh_btn_dark_id).setVisibility(View.GONE);
+        if (isDark) {
+            activity.findViewById(R.id.refresh_btn_dark_id).setVisibility(View.GONE);
+        } else {
+            activity.findViewById(R.id.refresh_btn_light_id).setVisibility(View.GONE);
+        }
+
     }
 
     /**
      * @param refreshButton a button for refreshing server connecting.
-     * @param listener a listener that button set its to itself.
+     * @param listener      a listener that button set its to itself.
      */
     public void setRefreshButton(ImageButton refreshButton, Listener listener) {
         this.refreshButton = refreshButton;
@@ -89,7 +106,7 @@ public class Components {
 
     /**
      * @param infoButton a button for showing info page.
-     * @param listener a listener that button set its to itself.
+     * @param listener   a listener that button set its to itself.
      */
     public void setInfoButton(ImageButton infoButton, Listener listener) {
         infoButton.setOnClickListener(listener);
@@ -100,6 +117,23 @@ public class Components {
      */
     public void setSwitchCompat(SwitchCompat switchCompat) {
         this.switchCompat = switchCompat;
+    }
+
+    public TextView getTextView() {
+        return textView;
+    }
+
+    public void setTextView(TextView textView) {
+        this.textView = textView;
+    }
+
+    public void setNumber() {
+        number = userChecker.getNumberOfMembers() + 1;
+    }
+
+    public String setText() {
+        setNumber();
+        return "تعداد افراد حاضر در کلاس: " + number;
     }
 
     /**
@@ -116,26 +150,34 @@ public class Components {
         switchCompat.setChecked(false);
     }
 
+    @SuppressLint("SetTextI18n")
+    public void showOnlineUser() {
+        getTextView().setText(setText());
+        getTextView().setVisibility(View.VISIBLE);
+    }
+
     /**
      * Initialize the server connecting.
      * If server is connected, app play or not connect, show a alert and
-     *  show refresh button and hide switch.
+     * show refresh button and hide switch.
      */
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     public void initialize() {
         counter += 2;
-        if (connector.isChecker()) {
+        if (connector.isChecker() && userChecker.isConnect()) {
+            showOnlineUser();
+            userChecker.setConnect(true);
+            showOnlineUser();
             mediaPlayer.start();
-            showPlayButton();
         } else {
+            textView.setVisibility(View.GONE);
             System.err.println("We have a problem in play file");
-            switchCompat.setVisibility(View.INVISIBLE);
+            switchCompat.setVisibility(View.GONE);
             AlertDialog.Builder alert = new AlertDialog.Builder(activity);
             alert.setMessage("کلاس هنوز شروع نشده، لطفا اندکی بعد تلاش کنید").show();
             refreshButton.setVisibility(View.VISIBLE);
         }
     }
-
 
     /**
      * Media player play and switch is true
@@ -143,6 +185,7 @@ public class Components {
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     public void play() {
         counter++;
+        showOnlineUser();
         showPlayButton();
         mediaPlayer.start();
     }
@@ -153,6 +196,7 @@ public class Components {
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     public void stop() {
         counter--;
+        textView.setVisibility(View.GONE);
         showPauseButton();
         mediaPlayer.pause();
     }
@@ -164,8 +208,6 @@ public class Components {
     public void checkPlay() {
         if (counter == 0) {
             initialize();
-        } else if (counter == 2) {
-            stop();
         } else if (counter == 1) {
             play();
         }
@@ -176,10 +218,10 @@ public class Components {
      */
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     public void switchCheck() {
-        if (switchCompat.isChecked()) {
-            if (isChecked) {
-                checkPlay();
-            }
+        if (isChecked) {
+            checkPlay();
+        } else {
+            stop();
         }
     }
 

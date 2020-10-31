@@ -6,16 +6,22 @@
     app:startDestination="@+id/nav_home"
     tools:ignore="UnusedNavigation">
 
-    <fragment
+    <activity
         android:id="@+id/nav_info"
-        android:name="com.example.radiosafa."
+        android:name="com.example.radiosafa.Activites.Info.InfoActivity"
         android:label="@string/menu_info"
         tools:layout="@layout/activity_info" />
 
-    <fragment
-        android:id="@+id/nav_setting"
-        android:name="com.example.radiosafa."
-        android:label="@string/setting"
+    <activity
+        android:id="@+id/nav_dark"
+        android:name="com.example.radiosafa.Activites.Main.OnlinePlayerDark"
+        android:label="پوسته روشن"
         tools:layout="@layout/activity_main_dark2" />
+
+    <activity
+        android:id="@+id/nav_light"
+        android:name="com.example.radiosafa.Activites.Main.OnlinePlayerLight"
+        android:label="پوسته عزاداری"
+        tools:layout="@layout/activity_main_2"/>
 
 </navigation>

@@ -7,20 +7,19 @@
     android:background="@color/starBackground"
     android:orientation="vertical">
 
-    <com.google.android.material.bottomnavigation.BottomNavigationView
-        android:id="@+id/nav_slideshow"
-        android:layout_width="match_parent"
+    <TextView
+        android:id="@+id/online_user_light_id"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:foreground="@color/starBackground"
-        app:itemIconTint="@color/itemSelected"
-        app:menu="@menu/activity_main_drawer">
-
-        <androidx.drawerlayout.widget.DrawerLayout
-            android:id="@+id/drawer_layout_light"
-            android:layout_width="wrap_content"
-            android:layout_height="55dp" />
-
-    </com.google.android.material.bottomnavigation.BottomNavigationView>
+        android:layout_alignParentEnd="true"
+        android:layout_centerHorizontal="true"
+        android:fontFamily="@font/bkoodak"
+        android:paddingTop="7dp"
+        android:paddingEnd="40dp"
+        android:text="تعداد افراد حاضر در کلاس:"
+        android:textColor="@android:color/black"
+        android:textSize="20sp"
+        tools:ignore="RtlSymmetry" />
 
     <ImageView
         android:id="@+id/image"

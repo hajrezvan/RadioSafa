@@ -7,7 +7,13 @@ import android.os.Bundle;
 import com.example.radiosafa.MyServices.Components;
 import com.example.radiosafa.R;
 
-public class MainActivityDark extends AppCompatActivity {
+/**
+ * OnlinePlayer have a online music player and work with a URL from its server.
+ *
+ * @author Haj Rezvan
+ * @version 2.5
+ */
+public class OnlinePlayerDark extends AppCompatActivity {
 
     /**
      * When program starts, view begin from this method.

@@ -7,14 +7,13 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.example.radiosafa.MyServices.Components;
 import com.example.radiosafa.R;
 
-
 /**
- * MainActivity have a online music player and work with a URL from its server.
+ * OnlinePlayer have a online music player and work with a URL from its server.
  *
  * @author Haj Rezvan
  * @version 2.5
  */
-public class MainActivity extends AppCompatActivity {
+public class OnlinePlayerLight extends AppCompatActivity {
 
     /**
      * When program starts, view begin from this method.
