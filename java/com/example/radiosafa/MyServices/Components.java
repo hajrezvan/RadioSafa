@@ -248,7 +248,8 @@ public class Components {
                 case R.id.info_btn_id:
                     showInfoPage();
                     break;
-                case R.id.refresh_btn_id:
+                case R.id.refresh_btn_light_id:
+                case R.id.refresh_btn_dark_id:
                     connector.refresh();
                     initialize();
                     break;
