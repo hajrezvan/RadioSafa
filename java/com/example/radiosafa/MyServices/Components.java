@@ -10,6 +10,7 @@ import android.view.View;
 import android.widget.CompoundButton;
 import android.widget.ImageButton;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
@@ -28,7 +29,7 @@ import java.util.concurrent.Executors;
  * @author Haj Rezvan
  * @version 1.2.4
  */
-public class Components {
+public class Components extends AppCompatActivity {
     private AppCompatActivity activity;
     private SwitchCompat switchCompat;
     private ImageButton refreshButton;
@@ -42,6 +43,7 @@ public class Components {
     //    private boolean isPlay;
     private int counter = 0;
     private int number;
+    private Thread thread;
 
     /**
      * Initialize the fields and setting them.
@@ -63,6 +65,21 @@ public class Components {
         ExecutorService executorService = Executors.newCachedThreadPool();
         executorService.execute(connector);
         executorService.execute(userChecker);
+        Runnable runnable = new Runnable() {
+            @Override
+            public void run() {
+                while (true) {
+                    try {
+                        number = userChecker.getNumberOfMembers();
+                        Thread.sleep(4000);
+                    } catch (InterruptedException e) {
+                        Toast.makeText(getApplicationContext(), "خطا در اتصال به سرور", Toast.LENGTH_SHORT).show();
+                        break;
+                    }
+                }
+            }
+        };
+        thread = new Thread(runnable);
         isChecked = false;
         setupViews();
     }
@@ -75,6 +92,7 @@ public class Components {
         if (isDark) {
             setSwitchCompat((SwitchCompat) activity.findViewById(R.id.switch_play_pause_dark));
             setRefreshButton((ImageButton) activity.findViewById(R.id.refresh_btn_dark_id), listener);
+            setTextView((TextView) activity.findViewById(R.id.online_user_dark_id));
         } else {
             setSwitchCompat((SwitchCompat) activity.findViewById(R.id.switch_play_pause_light));
             setRefreshButton((ImageButton) activity.findViewById(R.id.refresh_btn_light_id), listener);
@@ -169,6 +187,7 @@ public class Components {
             userChecker.setConnect(true);
             showOnlineUser();
             mediaPlayer.start();
+            thread.start();
         } else {
             textView.setVisibility(View.GONE);
             System.err.println("We have a problem in play file");
