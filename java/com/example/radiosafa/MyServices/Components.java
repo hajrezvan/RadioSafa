@@ -2,6 +2,7 @@ package com.example.radiosafa.MyServices;
 
 import android.annotation.SuppressLint;
 import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.media.MediaPlayer;
 import android.os.Build;
@@ -10,7 +11,6 @@ import android.view.View;
 import android.widget.CompoundButton;
 import android.widget.ImageButton;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
@@ -29,7 +29,7 @@ import java.util.concurrent.Executors;
  * @author Haj Rezvan
  * @version 1.2.4
  */
-public class Components extends AppCompatActivity {
+public class Components {
     private AppCompatActivity activity;
     private SwitchCompat switchCompat;
     private ImageButton refreshButton;
@@ -42,8 +42,6 @@ public class Components extends AppCompatActivity {
     private boolean isDark;
     //    private boolean isPlay;
     private int counter = 0;
-    private int number;
-    private Thread thread;
 
     /**
      * Initialize the fields and setting them.
@@ -61,27 +59,12 @@ public class Components extends AppCompatActivity {
      */
     public void setup() {
         connector = new Connector();
-        userChecker = new OnlineUserChecker();
+        setupViews();
+        userChecker = new OnlineUserChecker(this);
         ExecutorService executorService = Executors.newCachedThreadPool();
         executorService.execute(connector);
         executorService.execute(userChecker);
-        Runnable runnable = new Runnable() {
-            @Override
-            public void run() {
-                while (true) {
-                    try {
-                        number = userChecker.getNumberOfMembers();
-                        Thread.sleep(4000);
-                    } catch (InterruptedException e) {
-                        Toast.makeText(getApplicationContext(), "خطا در اتصال به سرور", Toast.LENGTH_SHORT).show();
-                        break;
-                    }
-                }
-            }
-        };
-        thread = new Thread(runnable);
         isChecked = false;
-        setupViews();
     }
 
     /**
@@ -102,15 +85,18 @@ public class Components extends AppCompatActivity {
 
         switchCompat.setOnCheckedChangeListener(listener);
 
-        mediaPlayer = connector.getMediaPlayer();
         textView.setVisibility(View.GONE);
+        mediaPlayer = connector.getMediaPlayer();
 
         if (isDark) {
             activity.findViewById(R.id.refresh_btn_dark_id).setVisibility(View.GONE);
         } else {
             activity.findViewById(R.id.refresh_btn_light_id).setVisibility(View.GONE);
         }
+    }
 
+    public void setText(String text) {
+        textView.setText(text);
     }
 
     /**
@@ -137,21 +123,8 @@ public class Components extends AppCompatActivity {
         this.switchCompat = switchCompat;
     }
 
-    public TextView getTextView() {
-        return textView;
-    }
-
     public void setTextView(TextView textView) {
         this.textView = textView;
-    }
-
-    public void setNumber() {
-        number = userChecker.getNumberOfMembers() + 1;
-    }
-
-    public String setText() {
-        setNumber();
-        return "تعداد افراد حاضر در کلاس: " + number;
     }
 
     /**
@@ -170,8 +143,8 @@ public class Components extends AppCompatActivity {
 
     @SuppressLint("SetTextI18n")
     public void showOnlineUser() {
-        getTextView().setText(setText());
-        getTextView().setVisibility(View.VISIBLE);
+        textView.setText(userChecker.text());
+        textView.setVisibility(View.VISIBLE);
     }
 
     /**
@@ -184,17 +157,24 @@ public class Components extends AppCompatActivity {
         counter += 2;
         if (connector.isChecker() && userChecker.isConnect()) {
             showOnlineUser();
-            userChecker.setConnect(true);
-            showOnlineUser();
             mediaPlayer.start();
-            thread.start();
         } else {
             textView.setVisibility(View.GONE);
-            System.err.println("We have a problem in play file");
             switchCompat.setVisibility(View.GONE);
-            AlertDialog.Builder alert = new AlertDialog.Builder(activity);
-            alert.setMessage("کلاس هنوز شروع نشده، لطفا اندکی بعد تلاش کنید").show();
             refreshButton.setVisibility(View.VISIBLE);
+
+            //Show alert.
+            DialogInterface.OnClickListener listener = new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialogInterface, int i) {
+                    dialogInterface.cancel();
+                }
+            };
+            AlertDialog.Builder alert = new AlertDialog.Builder(activity);
+            alert.setMessage("کلاس هنوز شروع نشده، لطفا اندکی بعد تلاش کنید")
+                    .setCancelable(false)
+                    .setTitle("متأسفم").setPositiveButton("متوجه شدم", listener)
+                    .show();
         }
     }
 
@@ -218,6 +198,7 @@ public class Components extends AppCompatActivity {
         textView.setVisibility(View.GONE);
         showPauseButton();
         mediaPlayer.pause();
+
     }
 
     /**

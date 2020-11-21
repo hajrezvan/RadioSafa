@@ -10,12 +10,14 @@ import java.net.URLConnection;
 public class OnlineUserChecker implements Runnable {
 
     private URL ipApi;
+    private Components activity;
     private int numberOfMembers;
     private boolean isConnect;
 
-    public OnlineUserChecker() {
+    public OnlineUserChecker(Components activity) {
         numberOfMembers = 0;
         isConnect = false;
+        this.activity = activity;
     }
 
     public boolean isConnect() {
@@ -26,18 +28,10 @@ public class OnlineUserChecker implements Runnable {
         isConnect = connect;
     }
 
-    public int getNumberOfMembers() {
-        return numberOfMembers;
-    }
-
-    public void setNumberOfMembers(int numberOfMembers) {
-        this.numberOfMembers = numberOfMembers;
-    }
-
     public void initUrl() {
         try {
             ipApi = new URL("https://radio.masjedsafa.com/stats?sid=2");
-
+            isConnect = true;
         } catch (MalformedURLException e) {
             System.err.println("We can not setting URL");
         }
@@ -50,18 +44,35 @@ public class OnlineUserChecker implements Runnable {
             String line = reader.readLine().trim();
             String[] api = line.split(">");
             String[] numberSplit = api[3].split("<");
-            setNumberOfMembers(Integer.parseInt(numberSplit[0]));
-            setConnect(true);
+            numberOfMembers = (Integer.parseInt(numberSplit[0]));
+            isConnect = true;
         } catch (IOException e) {
-            setConnect(false);
-            setNumberOfMembers(0);
-            System.err.println("We have a problem in connecting");
+            isConnect = false;
+            numberOfMembers = 0;
+        }
+    }
+
+    public String text() {
+        return "تعداد افراد حاضر در کلاس: " + (numberOfMembers);
+    }
+
+    public void show() {
+        try {
+            while (isConnect) {
+                refresh();
+                Thread.sleep(4000);
+            }
+        } catch (InterruptedException e) {
+            System.out.println("We have an error in refreshing");
+        } catch (Exception e) {
+            System.out.println("We have a problem");
+            refresh();
         }
     }
 
     @Override
     public void run() {
         initUrl();
-        refresh();
+        show();
     }
 }
