@@ -1,5 +1,7 @@
 package com.example.radiosafa.MyServices;
 
+import androidx.appcompat.app.AppCompatActivity;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -10,22 +12,20 @@ import java.net.URLConnection;
 public class OnlineUserChecker implements Runnable {
 
     private URL ipApi;
-    private Components activity;
+    private Components components;
+    private AppCompatActivity activityCompat;
     private int numberOfMembers;
     private boolean isConnect;
 
-    public OnlineUserChecker(Components activity) {
+    public OnlineUserChecker(Components components, AppCompatActivity activity) {
+        activityCompat = activity;
         numberOfMembers = 0;
         isConnect = false;
-        this.activity = activity;
+        this.components = components;
     }
 
     public boolean isConnect() {
         return isConnect;
-    }
-
-    public void setConnect(boolean connect) {
-        isConnect = connect;
     }
 
     public void initUrl() {
@@ -49,6 +49,8 @@ public class OnlineUserChecker implements Runnable {
         } catch (IOException e) {
             isConnect = false;
             numberOfMembers = 0;
+        } catch (Exception e) {
+            System.out.println("I don't know!!");
         }
     }
 
@@ -59,8 +61,14 @@ public class OnlineUserChecker implements Runnable {
     public void show() {
         try {
             while (isConnect) {
-                refresh();
                 Thread.sleep(4000);
+                activityCompat.runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        components.textChange();
+                    }
+                });
+                refresh();
             }
         } catch (InterruptedException e) {
             System.out.println("We have an error in refreshing");
@@ -73,6 +81,7 @@ public class OnlineUserChecker implements Runnable {
     @Override
     public void run() {
         initUrl();
+        refresh();
         show();
     }
 }

@@ -2,6 +2,7 @@ package com.example.radiosafa.MyServices;
 
 import android.annotation.SuppressLint;
 import android.app.AlertDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.media.MediaPlayer;
@@ -60,10 +61,14 @@ public class Components {
     public void setup() {
         connector = new Connector();
         setupViews();
-        userChecker = new OnlineUserChecker(this);
+        userChecker = new OnlineUserChecker(this, activity);
         ExecutorService executorService = Executors.newCachedThreadPool();
         executorService.execute(connector);
         executorService.execute(userChecker);
+/*
+        Thread connectorThread = new Thread(connector);
+        activity.runOnUiThread(userChecker);
+        connectorThread.start();*/
         isChecked = false;
     }
 
@@ -93,10 +98,6 @@ public class Components {
         } else {
             activity.findViewById(R.id.refresh_btn_light_id).setVisibility(View.GONE);
         }
-    }
-
-    public void setText(String text) {
-        textView.setText(text);
     }
 
     /**
@@ -141,10 +142,19 @@ public class Components {
         switchCompat.setChecked(false);
     }
 
+    public void textChange() {
+        String i = userChecker.text();
+        System.out.println(i);
+        showOnlineUser();
+    }
+
+    public TextView getTextView() {
+        return textView;
+    }
+
     @SuppressLint("SetTextI18n")
     public void showOnlineUser() {
         textView.setText(userChecker.text());
-        textView.setVisibility(View.VISIBLE);
     }
 
     /**
@@ -157,6 +167,7 @@ public class Components {
         counter += 2;
         if (connector.isChecker() && userChecker.isConnect()) {
             showOnlineUser();
+            getTextView().setVisibility(View.VISIBLE);
             mediaPlayer.start();
         } else {
             textView.setVisibility(View.GONE);
@@ -185,6 +196,7 @@ public class Components {
     public void play() {
         counter++;
         showOnlineUser();
+        getTextView().setVisibility(View.VISIBLE);
         showPlayButton();
         mediaPlayer.start();
     }
