@@ -65,10 +65,6 @@ public class Components {
         ExecutorService executorService = Executors.newCachedThreadPool();
         executorService.execute(connector);
         executorService.execute(userChecker);
-/*
-        Thread connectorThread = new Thread(connector);
-        activity.runOnUiThread(userChecker);
-        connectorThread.start();*/
         isChecked = false;
     }
 
@@ -165,10 +161,25 @@ public class Components {
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     public void initialize() {
         counter += 2;
-        if (connector.isChecker() && userChecker.isConnect()) {
-            showOnlineUser();
-            getTextView().setVisibility(View.VISIBLE);
-            mediaPlayer.start();
+        if (connector.isChecker()) {
+            if (userChecker.isConnect()) {
+                showOnlineUser();
+                getTextView().setVisibility(View.VISIBLE);
+                mediaPlayer.start();
+            } else {
+                //Show alert.
+                DialogInterface.OnClickListener listener = new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        dialogInterface.cancel();
+                    }
+                };
+                AlertDialog.Builder alert = new AlertDialog.Builder(activity);
+                alert.setMessage("خطا در اتصال به سرور، لطفا اندکی بعد تلاش کنید")
+                        .setCancelable(false)
+                        .setTitle("متأسفم").setPositiveButton("متوجه شدم", listener)
+                        .show();
+            }
         } else {
             textView.setVisibility(View.GONE);
             switchCompat.setVisibility(View.GONE);
