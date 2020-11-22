@@ -2,7 +2,6 @@ package com.example.radiosafa.MyServices;
 
 import android.annotation.SuppressLint;
 import android.app.AlertDialog;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.media.MediaPlayer;
@@ -179,6 +178,8 @@ public class Components {
                         .setCancelable(false)
                         .setTitle("متأسفم").setPositiveButton("متوجه شدم", listener)
                         .show();
+                mediaPlayer.reset();
+                connector.setURL();
             }
         } else {
             textView.setVisibility(View.GONE);
