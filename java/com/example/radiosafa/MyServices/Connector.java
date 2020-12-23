@@ -53,25 +53,29 @@ public class Connector implements Runnable {
             mediaPlayer.prepare(); // might take long! (for buffering, etc)
             return true;
         } catch (IOException exception) {
-            System.err.println("**********\n\n\n\n\n\n\n\n\nWe have a problem" +
-                    "\n\n\n\n\n\n\n\n\n**********");
+            showAlert();
+            exception.printStackTrace();
             return false;
         } catch (Exception e) {
-
-            DialogInterface.OnClickListener listener = new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialogInterface, int i) {
-                    dialogInterface.cancel();
-                }
-            };
-
-            AlertDialog.Builder alert = new AlertDialog.Builder(activity);
-            alert.setMessage("خطا در اتصال به سرور، لطفا اندکی بعد تلاش کنید")
-                    .setCancelable(false)
-                    .setTitle("متأسفم").setPositiveButton("متوجه شدم", listener)
-                    .show();
+            showAlert();
+            e.printStackTrace();
             return false;
         }
+    }
+
+    private void showAlert() {
+        DialogInterface.OnClickListener listener = new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                dialogInterface.cancel();
+            }
+        };
+
+        AlertDialog.Builder alert = new AlertDialog.Builder(activity);
+        alert.setMessage("خطا در اتصال به سرور، لطفا اندکی بعد تلاش کنید")
+                .setCancelable(false)
+                .setTitle("متأسفم").setPositiveButton("متوجه شدم", listener)
+                .show();
     }
 
     public boolean isChecker() {
