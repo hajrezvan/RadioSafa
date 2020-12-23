@@ -19,7 +19,9 @@
         android:text="تعداد افراد حاضر در کلاس:"
         android:textColor="@android:color/black"
         android:textSize="20sp"
-        tools:ignore="RtlSymmetry" />
+        tools:ignore="RtlSymmetry"
+        android:layout_alignParentRight="true"
+        android:paddingRight="40dp" />
 
     <ImageView
         android:layout_width="match_parent"
@@ -70,7 +72,8 @@
         android:layout_marginBottom="155sp"
         android:background="@null"
         android:contentDescription="@string/todo"
-        android:src="@drawable/ic_baseline_refresh_24" />
+        android:src="@drawable/ic_baseline_refresh_24"
+        android:layout_marginLeft="40dp" />
 
 
     <ImageButton
@@ -83,7 +86,9 @@
         android:layout_marginBottom="20sp"
         android:background="@null"
         android:contentDescription="@string/todo"
-        android:src="@drawable/ic_baseline_info_24" />
+        android:src="@drawable/ic_baseline_info_24"
+        android:layout_alignParentRight="true"
+        android:layout_marginRight="20sp" />
 
     <ImageView
         android:layout_width="200sp"

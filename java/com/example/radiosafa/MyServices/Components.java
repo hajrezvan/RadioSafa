@@ -58,7 +58,7 @@ public class Components {
      * Than setting components.
      */
     public void setup() {
-        connector = new Connector();
+        connector = new Connector(activity);
         setupViews();
         userChecker = new OnlineUserChecker(this, activity);
         ExecutorService executorService = Executors.newCachedThreadPool();
@@ -165,6 +165,8 @@ public class Components {
                 showOnlineUser();
                 getTextView().setVisibility(View.VISIBLE);
                 mediaPlayer.start();
+                refreshButton.setVisibility(View.GONE);
+                switchCompat.setVisibility(View.VISIBLE);
             } else {
                 //Show alert.
                 DialogInterface.OnClickListener listener = new DialogInterface.OnClickListener() {
@@ -274,6 +276,9 @@ public class Components {
                     break;
                 case R.id.refresh_btn_light_id:
                 case R.id.refresh_btn_dark_id:
+                    if (connector.isChecker()) {
+                        connector.reset();
+                    }
                     connector.refresh();
                     initialize();
                     break;
