@@ -61,7 +61,6 @@ public class OnlineUserChecker implements Runnable {
     public void show() {
         try {
             while (isConnect) {
-                Thread.sleep(4000);
                 activityCompat.runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
@@ -69,6 +68,7 @@ public class OnlineUserChecker implements Runnable {
                     }
                 });
                 refresh();
+                Thread.sleep(4000);
             }
         } catch (InterruptedException e) {
             System.out.println("We have an error in refreshing");

@@ -22,12 +22,23 @@
         tools:ignore="RtlSymmetry" />
 
     <ImageView
-        android:id="@+id/image"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_marginTop="55dp"
-        android:contentDescription="@string/todo"
-        android:src="@drawable/ghab_with_picture" />
+        android:layout_height="wrap_content"
+        android:src="@drawable/radio_safa_logo"
+        android:paddingEnd="10dp"
+        android:paddingStart="10dp"
+        android:paddingTop="50dp"
+        android:layout_centerHorizontal="true"/>
+
+
+
+<!--    <ImageView-->
+<!--        android:id="@+id/image"-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="match_parent"-->
+<!--        android:layout_marginTop="55dp"-->
+<!--        android:contentDescription="@string/todo"-->
+<!--        android:src="@drawable/ghab_with_picture" />-->
 
     <ImageView
         android:layout_width="150sp"
