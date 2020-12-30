@@ -19,7 +19,7 @@ public class SplashActivity extends AppCompatActivity {
 
         //Create a object from inner class.
         MyHandler handler = new MyHandler();
-        new Handler().postDelayed(handler, 4000);
+        new Handler().postDelayed(handler, 3000);
     }
 
     private class MyHandler implements Runnable {
