@@ -24,13 +24,14 @@
         android:paddingRight="40dp" />
 
     <ImageView
-        android:layout_width="match_parent"
+        android:id="@+id/radio"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:src="@drawable/radio_safa_logo"
-        android:paddingEnd="10dp"
-        android:paddingStart="10dp"
-        android:paddingTop="50dp"
-        android:layout_centerHorizontal="true"/>
+        android:src="@drawable/logo_sout"
+        android:paddingEnd="60dp"
+        android:paddingStart="60dp"
+        android:layout_centerHorizontal="true"
+        android:contentDescription="@string/logo_sout" />
 
 
 
@@ -74,6 +75,18 @@
         android:contentDescription="@string/todo"
         android:src="@drawable/ic_baseline_refresh_24"
         android:layout_marginLeft="40dp" />
+    <TextView
+        android:id="@+id/loading_txt"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/radio"
+        android:layout_centerHorizontal="true"
+        android:background="@null"
+        android:fontFamily="@font/bkoodak"
+        android:text="@string/loading"
+        android:textColor="@color/exo_black_opacity_70"
+        android:textSize="20sp"
+        tools:ignore="RtlSymmetry" />
 
 
     <ImageButton

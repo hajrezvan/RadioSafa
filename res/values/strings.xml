@@ -35,6 +35,8 @@
     <string name="attachment_summary_off">Only download attachments when manually requested</string>
     <string name="title_activity_settings_light">SettingsActivityLight</string>
     <string name="title_activity_settings_dark">SettingsActivityDark</string>
+    <string name="loading">در حال بارگزاری ...</string>
+    <string name="logo_sout">Logo of Sout ar rassol</string>
 
     <string-array name="thems">
         <item>روشن</item>

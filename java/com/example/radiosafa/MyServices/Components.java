@@ -38,9 +38,6 @@ public class Components {
     private OnlineUserChecker userChecker;
     private TextView textView;
     private boolean isChecked;
-    //if true, activity is dark them
-    private boolean isDark;
-    //    private boolean isPlay;
     private int counter = 0;
 
     /**
@@ -48,9 +45,8 @@ public class Components {
      *
      * @param activity is a activity that should be setup components on its.
      */
-    public Components(AppCompatActivity activity, boolean isDark) {
+    public Components(AppCompatActivity activity) {
         this.activity = activity;
-        this.isDark = isDark;
     }
 
     /**
@@ -62,8 +58,8 @@ public class Components {
         setupViews();
         userChecker = new OnlineUserChecker(this, activity);
         ExecutorService executorService = Executors.newCachedThreadPool();
-        executorService.execute(connector);
         executorService.execute(userChecker);
+        executorService.execute(connector);
         isChecked = false;
     }
 
@@ -72,27 +68,16 @@ public class Components {
      */
     public void setupViews() {
         Listener listener = new Listener();
-        if (isDark) {
-            setSwitchCompat((SwitchCompat) activity.findViewById(R.id.switch_play_pause_dark));
-            setRefreshButton((ImageButton) activity.findViewById(R.id.refresh_btn_dark_id), listener);
-            setTextView((TextView) activity.findViewById(R.id.online_user_dark_id));
-        } else {
-            setSwitchCompat((SwitchCompat) activity.findViewById(R.id.switch_play_pause_light));
-            setRefreshButton((ImageButton) activity.findViewById(R.id.refresh_btn_light_id), listener);
-            setTextView((TextView) activity.findViewById(R.id.online_user_light_id));
-        }
+        setSwitchCompat((SwitchCompat) activity.findViewById(R.id.switch_play_pause_light));
+        setRefreshButton((ImageButton) activity.findViewById(R.id.refresh_btn_light_id), listener);
+        setTextView((TextView) activity.findViewById(R.id.online_user_light_id));
         setInfoButton((ImageButton) activity.findViewById(R.id.info_btn_id), listener);
 
         switchCompat.setOnCheckedChangeListener(listener);
 
         textView.setVisibility(View.GONE);
         mediaPlayer = connector.getMediaPlayer();
-
-        if (isDark) {
-            activity.findViewById(R.id.refresh_btn_dark_id).setVisibility(View.GONE);
-        } else {
-            activity.findViewById(R.id.refresh_btn_light_id).setVisibility(View.GONE);
-        }
+        activity.findViewById(R.id.refresh_btn_light_id).setVisibility(View.GONE);
     }
 
     /**
@@ -159,29 +144,14 @@ public class Components {
      */
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     public void initialize() {
-        counter += 2;
         if (connector.isChecker()) {
             if (userChecker.isConnect()) {
+                counter += 2;
                 showOnlineUser();
                 getTextView().setVisibility(View.VISIBLE);
                 mediaPlayer.start();
                 refreshButton.setVisibility(View.GONE);
                 switchCompat.setVisibility(View.VISIBLE);
-            } else {
-                //Show alert.
-                DialogInterface.OnClickListener listener = new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
-                        dialogInterface.cancel();
-                    }
-                };
-                AlertDialog.Builder alert = new AlertDialog.Builder(activity);
-                alert.setMessage("خطا در اتصال به سرور، لطفا اندکی بعد تلاش کنید")
-                        .setCancelable(false)
-                        .setTitle("متأسفم").setPositiveButton("متوجه شدم", listener)
-                        .show();
-                mediaPlayer.reset();
-                connector.setURL();
             }
         } else {
             textView.setVisibility(View.GONE);
@@ -196,7 +166,7 @@ public class Components {
                 }
             };
             AlertDialog.Builder alert = new AlertDialog.Builder(activity);
-            alert.setMessage("کلاس هنوز شروع نشده، لطفا اندکی بعد تلاش کنید")
+            alert.setMessage("برنامه هنوز شروع نشده، لطفا اندکی بعد تلاش کنید")
                     .setCancelable(false)
                     .setTitle("متأسفم").setPositiveButton("متوجه شدم", listener)
                     .show();
@@ -275,7 +245,6 @@ public class Components {
                     showInfoPage();
                     break;
                 case R.id.refresh_btn_light_id:
-                case R.id.refresh_btn_dark_id:
                     if (connector.isChecker()) {
                         connector.reset();
                     }

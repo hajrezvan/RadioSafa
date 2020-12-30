@@ -13,12 +13,6 @@
         tools:layout="@layout/activity_info" />
 
     <activity
-        android:id="@+id/nav_dark"
-        android:name="com.example.radiosafa.Activites.Main.OnlinePlayerDark"
-        android:label="پوسته روشن"
-        tools:layout="@layout/activity_main_dark2" />
-
-    <activity
         android:id="@+id/nav_light"
         android:name="com.example.radiosafa.Activites.Main.OnlinePlayerLight"
         android:label="پوسته عزاداری"
