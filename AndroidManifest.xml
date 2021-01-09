@@ -14,16 +14,10 @@
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true"
         tools:targetApi="m">
-        <activity
-            android:name=".Activites.Setting.SettingsActivityDark"
-            android:label="@string/title_activity_settings_dark" />
-        <activity
-            android:name=".Activites.Setting.SettingsActivityLight"
-            android:label="@string/title_activity_settings_light" />
-        <activity android:name=".Activites.Main.OnlinePlayerDark" />
-        <activity android:name=".Activites.Info.InfoActivity" />
-        <activity android:name=".Activites.Main.OnlinePlayerLight" />
-        <activity android:name=".Activites.Splash.SplashActivity">
+
+        <activity android:name=".view.Activites.Info.InfoActivity" />
+        <activity android:name=".view.Activites.Main.OnlinePlayerLight" />
+        <activity android:name=".view.Activites.Splash.SplashActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

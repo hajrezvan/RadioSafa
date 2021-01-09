@@ -1,13 +1,12 @@
-package com.example.radiosafa.Activites.Splash;
+package com.example.radiosafa.view.Activites.Splash;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
-import android.view.View;
 
-import com.example.radiosafa.Activites.Main.OnlinePlayerLight;
+import com.example.radiosafa.view.Activites.Main.OnlinePlayerLight;
 import com.example.radiosafa.R;
 
 public class SplashActivity extends AppCompatActivity {
@@ -30,5 +29,4 @@ public class SplashActivity extends AppCompatActivity {
             finish();
         }
     }
-
 }

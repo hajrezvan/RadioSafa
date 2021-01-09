@@ -1,4 +1,4 @@
-package com.example.radiosafa.Activites.Info;
+package com.example.radiosafa.view.Activites.Info;
 
 import androidx.appcompat.app.AppCompatActivity;
 

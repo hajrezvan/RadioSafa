@@ -11,54 +11,46 @@
         android:id="@+id/online_user_light_id"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentEnd="true"
+        android:layout_below="@+id/headphone_id"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentLeft="true"
         android:layout_centerHorizontal="true"
         android:fontFamily="@font/bkoodak"
-        android:paddingTop="7dp"
-        android:paddingEnd="40dp"
-        android:text="تعداد افراد حاضر در کلاس:"
+        android:paddingStart="30sp"
+        android:paddingLeft="10sp"
+        android:text="12 "
         android:textColor="@android:color/black"
         android:textSize="20sp"
-        tools:ignore="RtlSymmetry"
-        android:layout_alignParentRight="true"
-        android:paddingRight="40dp" />
+        tools:ignore="RelativeOverlap,RtlSymmetry" />
+
+    <ImageView
+        android:id="@+id/headphone_id"
+        android:layout_width="60sp"
+        android:layout_height="60sp"
+        android:layout_margin="10sp"
+        android:contentDescription="Show headphone icon"
+        android:src="@drawable/ic_headphone" />
 
     <ImageView
         android:id="@+id/radio"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:src="@drawable/logo_sout"
-        android:paddingEnd="60dp"
-        android:paddingStart="60dp"
+        android:layout_height="250sp"
         android:layout_centerHorizontal="true"
-        android:contentDescription="@string/logo_sout" />
+        android:layout_marginTop="150sp"
+        android:contentDescription="@string/logo_sout"
+        android:paddingStart="60sp"
+        android:paddingEnd="60sp"
+        android:src="@drawable/logo_sout" />
 
-
-
-<!--    <ImageView-->
-<!--        android:id="@+id/image"-->
-<!--        android:layout_width="match_parent"-->
-<!--        android:layout_height="match_parent"-->
-<!--        android:layout_marginTop="55dp"-->
-<!--        android:contentDescription="@string/todo"-->
-<!--        android:src="@drawable/ghab_with_picture" />-->
-
-    <ImageView
-        android:layout_width="150sp"
-        android:layout_height="150sp"
-        android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true"
-        android:layout_marginBottom="130sp"
-        android:contentDescription="@string/todo"
-        android:src="@drawable/button_place" />
 
     <androidx.appcompat.widget.SwitchCompat
         android:id="@+id/switch_play_pause_light"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_below="@id/radio"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
-        android:layout_marginBottom="183sp"
+        android:layout_marginBottom="155sp"
         android:thumb="@drawable/thumb"
         app:track="@drawable/track"
         tools:ignore="UseSwitchCompatOrMaterialXml" />
@@ -67,47 +59,48 @@
         android:id="@+id/refresh_btn_light_id"
         android:layout_width="100dp"
         android:layout_height="100dp"
+        android:layout_below="@id/radio"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
         android:layout_marginStart="40dp"
+        android:layout_marginLeft="40dp"
         android:layout_marginBottom="155sp"
         android:background="@null"
         android:contentDescription="@string/todo"
-        android:src="@drawable/ic_baseline_refresh_24"
-        android:layout_marginLeft="40dp" />
-    <TextView
-        android:id="@+id/loading_txt"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/radio"
-        android:layout_centerHorizontal="true"
-        android:background="@null"
-        android:fontFamily="@font/bkoodak"
-        android:text="@string/loading"
-        android:textColor="@color/exo_black_opacity_70"
-        android:textSize="20sp"
-        tools:ignore="RtlSymmetry" />
-
+        android:src="@drawable/ic_baseline_refresh_24" />
 
     <ImageButton
         android:id="@+id/info_btn_id"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
         android:layout_alignParentEnd="true"
-        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"
+        android:layout_marginTop="20sp"
         android:layout_marginEnd="20sp"
-        android:layout_marginBottom="20sp"
+        android:layout_marginRight="20sp"
         android:background="@null"
         android:contentDescription="@string/todo"
-        android:src="@drawable/ic_baseline_info_24"
-        android:layout_alignParentRight="true"
-        android:layout_marginRight="20sp" />
+        android:src="@drawable/ic_baseline_info_24" />
 
     <ImageView
-        android:layout_width="200sp"
-        android:layout_height="100sp"
+        android:id="@+id/live_off"
+        android:layout_width="50sp"
+        android:layout_height="50sp"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
         android:layout_alignParentBottom="true"
-        android:contentDescription="@string/todo"
-        android:src="@drawable/logo" />
+        android:layout_margin="20sp"
+        android:src="@drawable/ic_live_streaming_off" />
+
+    <ImageView
+        android:id="@+id/live_on"
+        android:layout_width="50sp"
+        android:layout_height="50sp"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentBottom="true"
+        android:layout_margin="20sp"
+        android:src="@drawable/ic_live_streaming_on" />
 
 </RelativeLayout>

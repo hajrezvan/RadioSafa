@@ -6,12 +6,12 @@
     android:layout_height="match_parent"
     android:layout_gravity="center"
     android:background="@color/starBackground"
-    tools:context=".Activites.Splash.SplashActivity">
+    tools:context=".view.Activites.Splash.SplashActivity">
 
     <ImageView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:src="@drawable/ghab"/>
+        android:src="@drawable/ghab" />
 
     <ImageView
         android:id="@+id/image"

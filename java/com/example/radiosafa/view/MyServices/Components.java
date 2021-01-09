@@ -1,22 +1,25 @@
-package com.example.radiosafa.MyServices;
+package com.example.radiosafa.view.MyServices;
 
 import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.media.MediaPlayer;
 import android.os.Build;
 import android.os.Handler;
 import android.view.View;
 import android.widget.CompoundButton;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.SwitchCompat;
 
-import com.example.radiosafa.Activites.Info.InfoActivity;
+import com.example.radiosafa.control.ExoPlayerConnector;
+import com.example.radiosafa.control.OnlineUserChecker;
+import com.example.radiosafa.model.DataCenter;
+import com.example.radiosafa.view.Activites.Info.InfoActivity;
 import com.example.radiosafa.R;
 
 import java.util.concurrent.ExecutorService;
@@ -30,13 +33,17 @@ import java.util.concurrent.Executors;
  * @version 1.2.4
  */
 public class Components {
-    private AppCompatActivity activity;
+
+    private final AppCompatActivity activity;
     private SwitchCompat switchCompat;
     private ImageButton refreshButton;
-    private MediaPlayer mediaPlayer;
-    private Connector connector;
+    private ImageView headphone;
+    private ImageView liveOn;
+    private ImageView liveOff;
+    private ExoPlayerConnector exoPlayerConnector;
     private OnlineUserChecker userChecker;
     private TextView textView;
+    private boolean isConnect;
     private boolean isChecked;
     private int counter = 0;
 
@@ -54,12 +61,27 @@ public class Components {
      * Than setting components.
      */
     public void setup() {
-        connector = new Connector(activity);
-        setupViews();
-        userChecker = new OnlineUserChecker(this, activity);
+        DataCenter dataCenter = new DataCenter();
+        dataCenter.run();
+
         ExecutorService executorService = Executors.newCachedThreadPool();
-        executorService.execute(userChecker);
-        executorService.execute(connector);
+
+        String exoplayerUrl = dataCenter.getOnlinePlayer();
+        String listenerChecker = dataCenter.getOnlineListener();
+
+        exoPlayerConnector = new ExoPlayerConnector(activity, exoplayerUrl);
+
+        setupViews();
+        isConnect = false;
+
+        userChecker = new OnlineUserChecker(this, activity, listenerChecker);
+
+        isConnect = dataCenter.isConnect();
+
+        if (isConnect) {
+            executorService.execute(userChecker);
+            executorService.execute(exoPlayerConnector);
+        }
         isChecked = false;
     }
 
@@ -73,10 +95,17 @@ public class Components {
         setTextView((TextView) activity.findViewById(R.id.online_user_light_id));
         setInfoButton((ImageButton) activity.findViewById(R.id.info_btn_id), listener);
 
+        headphone = activity.findViewById(R.id.headphone_id);
+        liveOff = activity.findViewById(R.id.live_off);
+        liveOn = activity.findViewById(R.id.live_on);
+
+        headphone.setVisibility(View.GONE);
+        liveOn.setVisibility(View.GONE);
+
         switchCompat.setOnCheckedChangeListener(listener);
 
         textView.setVisibility(View.GONE);
-        mediaPlayer = connector.getMediaPlayer();
+//        mediaPlayer = mediaPlayerConnector.getMediaPlayer();
         activity.findViewById(R.id.refresh_btn_light_id).setVisibility(View.GONE);
     }
 
@@ -128,13 +157,25 @@ public class Components {
         showOnlineUser();
     }
 
-    public TextView getTextView() {
-        return textView;
-    }
-
     @SuppressLint("SetTextI18n")
     public void showOnlineUser() {
         textView.setText(userChecker.text());
+    }
+
+    private void offline() {
+        liveOn.setVisibility(View.GONE);
+        headphone.setVisibility(View.GONE);
+        textView.setVisibility(View.GONE);
+
+        liveOff.setVisibility(View.VISIBLE);
+    }
+
+    private void online() {
+        liveOn.setVisibility(View.VISIBLE);
+        headphone.setVisibility(View.VISIBLE);
+        textView.setVisibility(View.VISIBLE);
+
+        liveOff.setVisibility(View.GONE);
     }
 
     /**
@@ -142,17 +183,16 @@ public class Components {
      * If server is connected, app play or not connect, show a alert and
      * show refresh button and hide switch.
      */
-    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
+
     public void initialize() {
-        if (connector.isChecker()) {
-            if (userChecker.isConnect()) {
-                counter += 2;
-                showOnlineUser();
-                getTextView().setVisibility(View.VISIBLE);
-                mediaPlayer.start();
-                refreshButton.setVisibility(View.GONE);
-                switchCompat.setVisibility(View.VISIBLE);
-            }
+//        if (mediaPlayerConnector.isChecker())
+        if (userChecker.isConnect() && exoPlayerConnector.isChecker()) {
+            counter += 2;
+            showOnlineUser();
+            online();
+            exoPlayerConnector.play();
+            refreshButton.setVisibility(View.GONE);
+            switchCompat.setVisibility(View.VISIBLE);
         } else {
             textView.setVisibility(View.GONE);
             switchCompat.setVisibility(View.GONE);
@@ -176,31 +216,30 @@ public class Components {
     /**
      * Media player play and switch is true
      */
-    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
+
     public void play() {
         counter++;
         showOnlineUser();
-        getTextView().setVisibility(View.VISIBLE);
         showPlayButton();
-        mediaPlayer.start();
+        online();
+        exoPlayerConnector.play();
     }
 
     /**
      * Media player stop and switch is false
      */
-    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
+
     public void stop() {
         counter--;
-        textView.setVisibility(View.GONE);
+        offline();
         showPauseButton();
-        mediaPlayer.pause();
-
+        exoPlayerConnector.pause();
     }
 
     /**
      * Checking for initialize or play or stop.
      */
-    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
+
     public void checkPlay() {
         if (counter == 0) {
             initialize();
@@ -209,10 +248,7 @@ public class Components {
         }
     }
 
-    /**
-     * Switch checks that should play or stop now.
-     */
-    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
+
     public void switchCheck() {
         if (isChecked) {
             checkPlay();
@@ -235,7 +271,8 @@ public class Components {
     }
 
     private class Listener implements View.OnClickListener, CompoundButton.OnCheckedChangeListener {
-        @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
+
+        @SuppressLint("NonConstantResourceId")
         @Override
         public void onClick(View view) {
             int viewID = view.getId();
@@ -245,10 +282,10 @@ public class Components {
                     showInfoPage();
                     break;
                 case R.id.refresh_btn_light_id:
-                    if (connector.isChecker()) {
-                        connector.reset();
+                    if (exoPlayerConnector.isChecker()) {
+                        exoPlayerConnector.stop();
                     }
-                    connector.refresh();
+                    exoPlayerConnector.refresh();
                     initialize();
                     break;
             }

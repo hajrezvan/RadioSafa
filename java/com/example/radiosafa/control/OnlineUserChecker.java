@@ -1,6 +1,8 @@
-package com.example.radiosafa.MyServices;
+package com.example.radiosafa.control;
 
 import androidx.appcompat.app.AppCompatActivity;
+
+import com.example.radiosafa.view.MyServices.Components;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -12,12 +14,14 @@ import java.net.URLConnection;
 public class OnlineUserChecker implements Runnable {
 
     private URL ipApi;
-    private Components components;
-    private AppCompatActivity activityCompat;
+    private final Components components;
+    private final AppCompatActivity activityCompat;
     private int numberOfMembers;
     private boolean isConnect;
+    private String url;
 
-    public OnlineUserChecker(Components components, AppCompatActivity activity) {
+    public OnlineUserChecker(Components components, AppCompatActivity activity, String url) {
+        this.url = url;
         activityCompat = activity;
         numberOfMembers = 0;
         isConnect = false;
@@ -30,7 +34,7 @@ public class OnlineUserChecker implements Runnable {
 
     public void initUrl() {
         try {
-            ipApi = new URL("https://radio.masjedsafa.com/stats?sid=2");
+            ipApi = new URL(url);
             isConnect = true;
         } catch (MalformedURLException e) {
             System.err.println("We can not setting URL");
@@ -55,7 +59,7 @@ public class OnlineUserChecker implements Runnable {
     }
 
     public String text() {
-        return "تعداد افراد حاضر در کلاس: " + (numberOfMembers);
+        return "" + (numberOfMembers);
     }
 
     public void show() {
@@ -82,6 +86,6 @@ public class OnlineUserChecker implements Runnable {
     public void run() {
         initUrl();
         refresh();
-        show();
+//        show();
     }
 }
