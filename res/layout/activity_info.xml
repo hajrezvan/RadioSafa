@@ -1,14 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".view.Activites.Info.InfoActivity"
-    android:orientation="vertical"
     android:layout_gravity="center"
-    android:background="@color/starBackground">
+    android:background="@color/starBackground"
+    android:orientation="vertical"
+    tools:context=".view.Activites.Info.InfoActivity">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -18,23 +17,26 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:fontFamily="@font/btitr"
             android:text="درباره ما"
             android:textColor="@android:color/widget_edittext_dark"
-            android:textSize="40dp"
-            android:fontFamily="@font/btitr"/>
+            android:textSize="40dp" />
     </LinearLayout>
 
     <LinearLayout
+        android:id="@+id/recycler_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
+
         <TextView
-            android:layout_margin="10dp"
+            android:id="@+id/about_us"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:textSize="20dp"
+            android:layout_margin="10dp"
             android:fontFamily="@font/bkoodak"
+            android:text="مجموعه فرهنگی مسجد جامع صفا"
             android:textColor="@android:color/widget_edittext_dark"
-            android:text="مجموعه فرهنگی مسجد جامع صفا"/>
+            android:textSize="20dp" />
     </LinearLayout>
 
 

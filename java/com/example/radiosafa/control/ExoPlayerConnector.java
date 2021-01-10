@@ -12,13 +12,11 @@ public class ExoPlayerConnector implements Runnable {
     private final SimpleExoPlayer simpleExoPlayer;
     private boolean isChecker;
     private final Context activity;
+    private String url;
 
-    public ExoPlayerConnector(Context activity, String url) {
+    public ExoPlayerConnector(Context activity) {
         this.activity = activity;
         simpleExoPlayer = new SimpleExoPlayer.Builder(activity).build();
-        MediaItem mediaItem = MediaItem.fromUri(url);
-        simpleExoPlayer.setMediaItem(mediaItem);
-        isChecker = false;
     }
 
     private void initializer() {
@@ -83,8 +81,18 @@ public class ExoPlayerConnector implements Runnable {
         initializer();
     }
 
+    public void setUrl(String url) {
+        this.url = url;
+    }
+
     @Override
     public void run() {
-        initializer();
+        if (url != null) {
+            System.out.println(url);
+            MediaItem mediaItem = MediaItem.fromUri(url);
+            simpleExoPlayer.setMediaItem(mediaItem);
+            initializer();
+        }
+        isChecker = false;
     }
 }

@@ -18,10 +18,10 @@ public class OnlineUserChecker implements Runnable {
     private final AppCompatActivity activityCompat;
     private int numberOfMembers;
     private boolean isConnect;
+    private boolean isPlay;
     private String url;
 
-    public OnlineUserChecker(Components components, AppCompatActivity activity, String url) {
-        this.url = url;
+    public OnlineUserChecker(Components components, AppCompatActivity activity) {
         activityCompat = activity;
         numberOfMembers = 0;
         isConnect = false;
@@ -30,6 +30,10 @@ public class OnlineUserChecker implements Runnable {
 
     public boolean isConnect() {
         return isConnect;
+    }
+
+    public boolean isPlay() {
+        return isPlay;
     }
 
     public void initUrl() {
@@ -41,14 +45,30 @@ public class OnlineUserChecker implements Runnable {
         }
     }
 
+    public void setNumberOfMembers(String line) {
+        String[] api = line.split(">");
+        String[] numberSplit = api[3].split("<");
+        numberOfMembers = (Integer.parseInt(numberSplit[0]));
+    }
+
+    public void setStatus(String line) {
+        String[] api = line.split(">");
+        String[] numberSplit = api[31].split("<");
+        int status = (Integer.parseInt(numberSplit[0]));
+        if (status != 0) {
+            isPlay = true;
+        } else {
+            isPlay = false;
+        }
+    }
+
     public void refresh() {
         try {
             URLConnection c = ipApi.openConnection();
             BufferedReader reader = new BufferedReader(new InputStreamReader(c.getInputStream()));
             String line = reader.readLine().trim();
-            String[] api = line.split(">");
-            String[] numberSplit = api[3].split("<");
-            numberOfMembers = (Integer.parseInt(numberSplit[0]));
+            setNumberOfMembers(line);
+            setStatus(line);
             isConnect = true;
         } catch (IOException e) {
             isConnect = false;
@@ -82,10 +102,17 @@ public class OnlineUserChecker implements Runnable {
         }
     }
 
+    public void setUrl(String url) {
+        this.url = url;
+    }
+
     @Override
-    public void run() {
-        initUrl();
-        refresh();
-//        show();
+    public synchronized void run() {
+        if (url != null) {
+            System.out.println(url);
+            initUrl();
+            refresh();
+            show();
+        }
     }
 }

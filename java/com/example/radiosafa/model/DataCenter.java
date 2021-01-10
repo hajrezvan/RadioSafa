@@ -1,6 +1,7 @@
 package com.example.radiosafa.model;
 
 import com.example.radiosafa.BuildConfig;
+import com.example.radiosafa.view.MyServices.Components;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -8,10 +9,8 @@ import java.io.InputStreamReader;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLConnection;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 
-public class DataCenter  {
+public class DataCenter implements Runnable {
 
     private String onlinePlayer;
     private String onlineListener;
@@ -21,12 +20,15 @@ public class DataCenter  {
     private String link;
     private URL url;
 
+    private final Components components;
+
     private boolean connect;
 
     private final long nowVersion;
     private long newVersion;
 
-    public DataCenter() {
+    public DataCenter(Components components) {
+        this.components = components;
         connect = false;
 
         nowVersion = BuildConfig.VERSION_CODE;
@@ -37,6 +39,7 @@ public class DataCenter  {
         link = null;
     }
 
+    @Override
     public void run() {
         initializer();
         connector();
@@ -65,47 +68,11 @@ public class DataCenter  {
                 System.out.println(input[i]);
             }
 
-            ExecutorService executorService = Executors.newCachedThreadPool();
-
-            Thread mediaPlayer = new Thread(new Runnable() {
-                @Override
-                public void run() {
-                    onlinePlayer = setOnlinePlayer(input[2]);
-                }
-            });
-            Thread listener = new Thread(new Runnable() {
-                @Override
-                public void run() {
-                    onlineListener = setOnlineListener(input[3]);
-                }
-            });
-
-            Thread about = new Thread(new Runnable() {
-                @Override
-                public void run() {
-                    aboutUs = setAboutUs(input[4]);
-                }
-            });
-
-            Thread version = new Thread(new Runnable() {
-                @Override
-                public void run() {
-                    newVersion = version(input[1]);
-                }
-            });
-
-            Thread apk = new Thread(new Runnable() {
-                @Override
-                public void run() {
-                    link = setLink(input[5]);
-                }
-            });
-
-            executorService.execute(mediaPlayer);
-            executorService.execute(listener);
-            executorService.execute(about);
-            executorService.execute(version);
-            executorService.execute(apk);
+            newVersion = version(input[1]);
+            onlinePlayer = setOnlinePlayer(input[2]);
+            onlineListener = setOnlineListener(input[3]);
+            aboutUs = setAboutUs(input[4]);
+            link = setLink(input[5]);
 
             System.out.println("\nMedia source: " + onlineListener);
             System.out.println("Listener source: " + onlinePlayer);
@@ -115,7 +82,8 @@ public class DataCenter  {
 
             System.out.println("Download link: " + link);
 
-            executorService.shutdown();
+            components.setExoplayerUrl(onlinePlayer);
+            components.setListenerChecker(onlineListener);
 
         } catch (IOException e) {
             e.printStackTrace();

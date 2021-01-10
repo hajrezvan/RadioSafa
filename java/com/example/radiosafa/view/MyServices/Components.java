@@ -2,8 +2,10 @@ package com.example.radiosafa.view.MyServices;
 
 import android.annotation.SuppressLint;
 import android.app.AlertDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Build;
 import android.os.Handler;
 import android.view.View;
@@ -18,6 +20,7 @@ import androidx.appcompat.widget.SwitchCompat;
 
 import com.example.radiosafa.control.ExoPlayerConnector;
 import com.example.radiosafa.control.OnlineUserChecker;
+import com.example.radiosafa.control.VersionChecker;
 import com.example.radiosafa.model.DataCenter;
 import com.example.radiosafa.view.Activites.Info.InfoActivity;
 import com.example.radiosafa.R;
@@ -43,7 +46,12 @@ public class Components {
     private ExoPlayerConnector exoPlayerConnector;
     private OnlineUserChecker userChecker;
     private TextView textView;
-    private boolean isConnect;
+    private DataCenter dataCenter;
+    private VersionChecker versionChecker;
+
+    private static final String TEXT = "text";
+    private String aboutUs;
+
     private boolean isChecked;
     private int counter = 0;
 
@@ -61,28 +69,52 @@ public class Components {
      * Than setting components.
      */
     public void setup() {
-        DataCenter dataCenter = new DataCenter();
-        dataCenter.run();
+        dataCenter = new DataCenter(this);
+
+        Thread data = new Thread(dataCenter);
+        data.start();
 
         ExecutorService executorService = Executors.newCachedThreadPool();
 
         String exoplayerUrl = dataCenter.getOnlinePlayer();
         String listenerChecker = dataCenter.getOnlineListener();
 
-        exoPlayerConnector = new ExoPlayerConnector(activity, exoplayerUrl);
+        System.out.println(exoplayerUrl);
+        System.out.println(listenerChecker);
+
+        exoPlayerConnector = new ExoPlayerConnector(activity);
 
         setupViews();
-        isConnect = false;
+        boolean isConnect;
 
-        userChecker = new OnlineUserChecker(this, activity, listenerChecker);
+        userChecker = new OnlineUserChecker(this, activity);
 
         isConnect = dataCenter.isConnect();
 
         if (isConnect) {
+            exoPlayerConnector.setUrl(exoplayerUrl);
+            userChecker.setUrl(listenerChecker);
+            System.out.println(exoplayerUrl);
+            System.out.println(listenerChecker);
+
             executorService.execute(userChecker);
             executorService.execute(exoPlayerConnector);
         }
         isChecked = false;
+    }
+
+    public void setExoplayerUrl(String exoplayerUrl) {
+        exoPlayerConnector.setUrl(exoplayerUrl);
+        if (!exoPlayerConnector.isChecker()) {
+            exoPlayerConnector.run();
+        }
+    }
+
+    public void setListenerChecker(String listenerChecker) {
+        userChecker.setUrl(listenerChecker);
+        if (!userChecker.isConnect()) {
+            userChecker.run();
+        }
     }
 
     /**
@@ -185,8 +217,7 @@ public class Components {
      */
 
     public void initialize() {
-//        if (mediaPlayerConnector.isChecker())
-        if (userChecker.isConnect() && exoPlayerConnector.isChecker()) {
+        if (userChecker.isPlay()) {
             counter += 2;
             showOnlineUser();
             online();
@@ -211,6 +242,7 @@ public class Components {
                     .setTitle("متأسفم").setPositiveButton("متوجه شدم", listener)
                     .show();
         }
+        versionChecker = new VersionChecker(dataCenter.getNowVersion(), dataCenter.getNewVersion(), activity, dataCenter.getLink());
     }
 
     /**
@@ -248,7 +280,6 @@ public class Components {
         }
     }
 
-
     public void switchCheck() {
         if (isChecked) {
             checkPlay();
@@ -261,9 +292,16 @@ public class Components {
      * Intent to info page
      */
     public void showInfoPage() {
+        aboutUs = dataCenter.getAboutUs();
+
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
+                SharedPreferences sharedPreferences = activity.getSharedPreferences(TEXT, Context.MODE_PRIVATE);
+                @SuppressLint
+                        ("CommitPrefEdits") SharedPreferences.Editor editor = sharedPreferences.edit();
+                editor.putString("TEXT", aboutUs);
+                editor.apply();
                 Intent intent = new Intent(activity, InfoActivity.class);
                 activity.startActivity(intent);
             }
