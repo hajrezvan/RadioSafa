@@ -47,7 +47,6 @@ public class Components {
     private OnlineUserChecker userChecker;
     private TextView textView;
     private DataCenter dataCenter;
-    private VersionChecker versionChecker;
 
     private static final String TEXT = "text";
     private String aboutUs;
@@ -242,7 +241,7 @@ public class Components {
                     .setTitle("متأسفم").setPositiveButton("متوجه شدم", listener)
                     .show();
         }
-        versionChecker = new VersionChecker(dataCenter.getNowVersion(), dataCenter.getNewVersion(), activity, dataCenter.getLink());
+        VersionChecker versionChecker = new VersionChecker(dataCenter.getNowVersion(), dataCenter.getNewVersion(), activity, dataCenter.getLink());
     }
 
     /**
