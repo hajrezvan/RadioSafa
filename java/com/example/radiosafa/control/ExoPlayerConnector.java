@@ -88,11 +88,19 @@ public class ExoPlayerConnector implements Runnable {
     @Override
     public void run() {
         if (url != null) {
-            System.out.println(url);
-            MediaItem mediaItem = MediaItem.fromUri(url);
-            simpleExoPlayer.setMediaItem(mediaItem);
+            setMediaItem();
             initializer();
         }
         isChecker = false;
+    }
+
+    private synchronized void setMediaItem() {
+        try {
+            MediaItem mediaItem = MediaItem.fromUri(url);
+            simpleExoPlayer.setThrowsWhenUsingWrongThread(false);
+            simpleExoPlayer.setMediaItem(mediaItem);
+        } catch (IllegalStateException exception) {
+            System.err.println("Player is accessed on the wrong thread.");
+        }
     }
 }
